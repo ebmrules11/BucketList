@@ -1,48 +1,77 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My Map</title>
+    <title>My Google Map</title>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzYJM23OJB-SE9kzvBY7hNQNAYatmxIjM&callback=initMap"></script>
     <script>
-      var users = [
-        {id: 1, lat: 37.7749, lng: -122.4194},
-        {id: 2, lat: 37.7858, lng: -122.4064},
-        {id: 3, lat: 37.7749, lng: -122.4313}
-      ];
+      var map;
+      var markers = [];
 
       function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+        map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 37.7749, lng: -122.4194},
-          zoom: 13
+          zoom: 8
         });
 
-        var markers = [];
+        // Define the profiles
+        var profiles = [
+          {
+            name: 'Profile 1',
+            coords: {lat: 37.7749, lng: -122.4194}
+          },
+          {
+            name: 'Profile 2',
+            coords: {lat: 37.8716, lng: -122.2727}
+          },
+          {
+            name: 'Profile 3',
+            coords: {lat: 37.3382, lng: -121.8863}
+          }
+        ];
 
-        for (var i = 0; i < users.length; i++) {
-          var user = users[i];
-          var marker = new google.maps.Marker({
-            position: {lat: user.lat, lng: user.lng},
-            map: map,
-            title: 'User ' + user.id
-          });
-          markers.push(marker);
+        // Add the profiles to the dropdown menu
+        var select = document.getElementById('profile-select');
+        for (var i = 0; i < profiles.length; i++) {
+          var option = document.createElement('option');
+          option.text = profiles[i].name;
+          option.value = i;
+          select.add(option);
         }
 
+        // Update the markers when a profile is selected
+        select.addEventListener('change', function() {
+          var index = select.value;
+          var coords = profiles[index].coords;
+          updateMarkers(coords);
+        });
+      }
+
+      function updateMarkers(coords) {
+        // Remove any existing markers
         for (var i = 0; i < markers.length; i++) {
-          var marker = markers[i];
-          marker.addListener('click', function() {
-            var user = users[i];
-            alert('User ID: ' + user.id + '\nLatitude: ' + user.lat + '\nLongitude: ' + user.lng);
-          });
+          markers[i].setMap(null);
         }
+        markers = [];
+
+        // Add a marker for the selected profile
+        var marker = new google.maps.Marker({
+          position: coords,
+          map: map,
+          title: 'Selected Profile'
+        });
+        markers.push(marker);
+
+        // Center the map on the selected profile
+        map.setCenter(coords);
+        map.setZoom(8);
       }
     </script>
   </head>
   <body onload="initMap()">
+    <div>
+      <label for="profile-select">Select a Profile:</label>
+      <select id="profile-select"></select>
+    </div>
     <div id="map" style="height: 500px;"></div>
   </body>
 </html>
-
-
-
-
