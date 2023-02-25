@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Map</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzYJM23OJB-SE9kzvBY7hNQNAYatmxIjM&callback=initMap"></script>
+    <script>
+      var users = [
+        {id: 1, lat: 37.7749, lng: -122.4194},
+        {id: 2, lat: 37.7858, lng: -122.4064},
+        {id: 3, lat: 37.7749, lng: -122.4313}
+      ];
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 37.7749, lng: -122.4194},
+          zoom: 13
+        });
+
+        var markers = [];
+
+        for (var i = 0; i < users.length; i++) {
+          var user = users[i];
+          var marker = new google.maps.Marker({
+            position: {lat: user.lat, lng: user.lng},
+            map: map,
+            title: 'User ' + user.id
+          });
+          markers.push(marker);
+        }
+
+        for (var i = 0; i < markers.length; i++) {
+          var marker = markers[i];
+          marker.addListener('click', function() {
+            var user = users[i];
+            alert('User ID: ' + user.id + '\nLatitude: ' + user.lat + '\nLongitude: ' + user.lng);
+          });
+        }
+      }
+    </script>
+  </head>
+  <body onload="initMap()">
+    <div id="map" style="height: 500px;"></div>
+  </body>
+</html>
+
+
+
+
