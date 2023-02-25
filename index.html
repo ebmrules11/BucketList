@@ -3,9 +3,58 @@
   <head>
     <title>My Google Map</title>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzYJM23OJB-SE9kzvBY7hNQNAYatmxIjM&callback=initMap"></script>
+    <style>
+      #container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      #map {
+        width: 70%;
+        height: 500px;
+      }
+      .profile {
+        display: flex;
+        align-items: center;
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px #ccc;
+      }
+      .profile img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        border-radius: 50%;
+      }
+      .profile-name {
+        font-weight: bold;
+        font-size: 16px;
+      }
+      .selected-profile {
+        background-color: #eee;
+      }
+    </style>
     <script>
       var map;
       var markers = [];
+      var profiles = [
+        {
+          name: 'Profile 1',
+          coords: {lat: 37.7749, lng: -122.4194},
+          image: 'https://via.placeholder.com/50'
+        },
+        {
+          name: 'Profile 2',
+          coords: {lat: 37.8716, lng: -122.2727},
+          image: 'https://via.placeholder.com/50'
+        },
+        {
+          name: 'Profile 3',
+          coords: {lat: 37.3382, lng: -121.8863},
+          image: 'https://via.placeholder.com/50'
+        }
+      ];
 
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -13,37 +62,32 @@
           zoom: 8
         });
 
-        // Define the profiles
-        var profiles = [
-          {
-            name: 'Profile 1',
-            coords: {lat: 37.7749, lng: -122.4194}
-          },
-          {
-            name: 'Profile 2',
-            coords: {lat: 37.8716, lng: -122.2727}
-          },
-          {
-            name: 'Profile 3',
-            coords: {lat: 37.3382, lng: -121.8863}
-          }
-        ];
-
-        // Add the profiles to the dropdown menu
-        var select = document.getElementById('profile-select');
+        // Add the profiles to the HTML
+        var container = document.getElementById('container');
         for (var i = 0; i < profiles.length; i++) {
-          var option = document.createElement('option');
-          option.text = profiles[i].name;
-          option.value = i;
-          select.add(option);
-        }
+          var profile = profiles[i];
+          var div = document.createElement('div');
+          div.classList.add('profile');
+          div.setAttribute('data-index', i);
+          div.innerHTML = '<img src="' + profile.image + '">' +
+                          '<div class="profile-name">' + profile.name + '</div>';
+          container.appendChild(div);
 
-        // Update the markers when a profile is selected
-        select.addEventListener('change', function() {
-          var index = select.value;
-          var coords = profiles[index].coords;
-          updateMarkers(coords);
-        });
+          // Add event listener to update markers when profile is clicked
+          div.addEventListener('click', function() {
+            var index = this.getAttribute('data-index');
+            updateMarkers(profiles[index].coords);
+
+            // Remove "selected" class from all profiles
+            var profiles = document.getElementsByClassName('profile');
+            for (var j = 0; j < profiles.length; j++) {
+              profiles[j].classList.remove('selected-profile');
+            }
+
+            // Add "selected" class to clicked profile
+            this.classList.add('selected-profile');
+          });
+        }
       }
 
       function updateMarkers(coords) {
@@ -63,15 +107,15 @@
 
         // Center the map on the selected profile
         map.setCenter(coords);
-        map.setZoom(8);
-      }
-    </script>
+  }
+</script>
   </head>
   <body onload="initMap()">
-    <div>
-      <label for="profile-select">Select a Profile:</label>
-      <select id="profile-select"></select>
+    <div id="container">
+      <div id="map"></div>
+      <div id="profiles-container">
+        <!-- Profiles will be added dynamically -->
+      </div>
     </div>
-    <div id="map" style="height: 500px;"></div>
   </body>
 </html>
