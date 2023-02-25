@@ -1,147 +1,61 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Google Maps API Example</title>
-    <style>
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+<head>
+	<title>Profiles with Maps</title>
+	<style>
+		.profile {
+			width: 100%;
+			margin-bottom: 20px;
+		}
+		.map {
+			height: 200px;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="profile">
+	  <h2>Profile 1</h2>
+	  <div id="map-1" class="map"></div>
+	</div>
 
-      #container {
-        display: flex;
-        height: 100%;
-      }
+	<div class="profile">
+	  <h2>Profile 2</h2>
+	  <div id="map-2" class="map"></div>
+	</div>
 
-      #map {
-        flex: 1;
-        height: 100%;
-      }
+	<!-- Add more profiles and maps as needed -->
 
-      #profiles {
-        width: 300px;
-        height: 100%;
-        overflow-y: scroll;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .profile {
-        margin: 10px;
-        padding: 10px;
-        border: 1px solid black;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-      }
-
-      .selected-profile {
-        background-color: #eee;
-      }
-
-      .profile-image {
-        width: 50px;
-        height: 50px;
-        margin-right: 10px;
-        border-radius: 50%;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container">
-      <div id="map"></div>
-      <div id="profiles">
-        <!-- Profiles will be added here dynamically -->
-      </div>
-    </div>
-
-    <script>
-      var map;
-      var markers = [];
-      var profiles = [
-        {
-          id: 1,
-          name: "John Doe",
-          coords: { lat: 37.7749, lng: -122.4194 }
-        },
-        {
-          id: 2,
-          name: "Jane Smith",
-          coords: { lat: 37.7749, lng: -122.4091 }
-        },
-        {
-          id: 3,
-          name: "Bob Johnson",
-          coords: { lat: 37.7849, lng: -122.4194 }
-        }
-      ];
-
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: { lat: 37.7749, lng: -122.4194 },
-          zoom: 8
-        });
-
-        // Add click listener to each profile
-        for (var i = 0; i < profiles.length; i++) {
-          var profile = profiles[i];
-          var profileElement = document.createElement('div');
-          var profileImage = document.createElement('img');
-          profileImage.classList.add('profile-image');
-          profileImage.setAttribute('src', 'https://api.adorable.io/avatars/50/' + profile.id);
-          profileElement.appendChild(profileImage);
-          var profileName = document.createElement('span');
-          profileName.innerText = profile.name;
-          profileElement.appendChild(profileName);
-          profileElement.addEventListener('click', function() {
-            updateMarkers(profile.coords);
-
-            // Remove "selected" class from all profiles
-            var profileElements = document.querySelectorAll('.profile');
-            for (var i = 0; i < profileElements.length; i++) {
-              profileElements[i].classList.remove('selected-profile');
-            }
-
-            // Add "selected" class to clicked profile
-            this.classList.add('selected-profile');
-          });
-          document.getElementById('profiles').appendChild(profileElement);
-        }
-
-        // Add the markers to the map
-        for (var i = 0; i < profiles.length; i++) {
-          var marker = new google.maps.Marker({
-            position: profiles
-            [i].coords,
-          map: map,
-        });
-        markers.push(marker);
-      }
-    }
-
-    function updateMarkers(coords) {
-      // Remove all existing markers from the map
-      for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-      }
-      markers = [];
-
-      // Add new marker to the map
-      var marker = new google.maps.Marker({
-        position: coords,
-        map: map,
-      });
-      markers.push(marker);
-
-      // Center the map on the new marker
-      map.setCenter(coords);
-      map.setZoom(15);
-    }
-    </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzYJM23OJB-SE9kzvBY7hNQNAYatmxIjM&callback=initMap"></script>
-  </body>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzYJM23OJB-SE9kzvBY7hNQNAYatmxIjM&callback=initMap"></script>
+    async defer></script>
+	<script>
+		function initMap() {
+		  // Create a map for the first profile
+		  var map1 = new google.maps.Map(document.getElementById('map-1'), {
+		    center: {lat: 37.7749, lng: -122.4194},
+		    zoom: 8
+		  });
+		  
+		  // Add a marker to the first map
+		  var marker1 = new google.maps.Marker({
+		    position: {lat: 37.7749, lng: -122.4194},
+		    map: map1,
+		    title: 'Marker 1'
+		  });
+		  
+		  // Create a map for the second profile
+		  var map2 = new google.maps.Map(document.getElementById('map-2'), {
+		    center: {lat: 34.0522, lng: -118.2437},
+		    zoom: 8
+		  });
+		  
+		  // Add a marker to the second map
+		  var marker2 = new google.maps.Marker({
+		    position: {lat: 34.0522, lng: -118.2437},
+		    map: map2,
+		    title: 'Marker 2'
+		  });
+		}
+	</script>
+</body>
 </html>
